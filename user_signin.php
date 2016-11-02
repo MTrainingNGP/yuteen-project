@@ -2,7 +2,7 @@
 require_once('config.php');
 
 if (isset($_POST['btnSignIn'])) {
-
+  session_start();
   extract($_POST);
   //print_r($_POST);
   $email = $_POST['email'];

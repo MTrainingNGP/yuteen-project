@@ -3,7 +3,7 @@
 
 	extract($_POST);
 	//print_r($_POST);
-	$image = "images/demo.jpg";
+	$image = "images/demo.png";
 	$insert = "insert into tbl_registration set 
 				   		first_name = '$first_name',
 				   		last_name = '$last_name',

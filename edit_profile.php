@@ -2,12 +2,22 @@
 
 //Include database configuration file
     include('config.php');
+
+    $id = $_SESSION['id'];
+    //echo $id;
     
     //Get all country data
-    $query = mysql_query("SELECT * FROM tbl_countries WHERE status = 1 ORDER BY country_name ASC");
+    $query = mysql_query("SELECT * FROM tbl_registration WHERE reg_id = '".$id."'");
     
     //Count total number of rows
-    $rowCount = mysql_num_rows($query);
+    $row = mysql_fetch_array($query);
+
+    //Get all country data
+    $queryCountry = mysql_query("SELECT * FROM tbl_countries WHERE status = 1 ORDER BY country_name ASC");
+    
+    //Count total number of rows
+    $rowCount = mysql_num_rows($queryCountry);
+
 
 ?>
 <!DOCTYPE html>
@@ -73,8 +83,9 @@
                 <label class="control-label col-sm-4" for="fname">First Name :</label>
                 <div class="col-sm-5" id="finame">
                   <input type="text" class="form-control" id="fname_id" name="fname" maxlength="25" 
-                         placeholder="Enter first name" onkeypress="return onlyAlphabets(event);"
-                         onblur="isEmpty(fname_id,err_fname,'First Name')" required>
+                         onkeypress="return onlyAlphabets(event);"
+                         onblur="isEmpty(fname_id,err_fname,'First Name')"
+                         value="<?php echo $row['first_name'];?>">
                          <span class="help-block" id="err_fname" style="color: red;"></span>
                 </div>
             </div>
@@ -83,8 +94,9 @@
                 <label class="control-label col-sm-4" for="lname">Last Name :</label>
                 <div class="col-sm-5" id="laname">
                   <input type="text" class="form-control" id="lname_id" name="lname" maxlength="20"
-                         placeholder="Enter last name" onkeypress="return onlyAlphabets(event);"
-                         onblur="isEmpty(lname_id,err_lname,'Last Name')" required>
+                         onkeypress="return onlyAlphabets(event);"
+                         onblur="isEmpty(lname_id,err_lname,'Last Name')"
+                         value="<?php echo $row['last_name'];?>">
                          <span class="help-block" id="err_lname" style="color: red;"></span>
                 </div>
             </div>
@@ -93,8 +105,9 @@
                 <label class="control-label col-sm-4" for="dad">Father's Name :</label>
                 <div class="col-sm-5" id="dname">
                   <input type="text" class="form-control" id="dad_id" name="dad" maxlength="20" 
-                         placeholder="Enter father's name" onkeypress="return onlyAlphabets(event);"
-                         onblur="isEmpty(dad_id,err_dad,'Father Name')" required>
+                         onkeypress="return onlyAlphabets(event);"
+                         onblur="isEmpty(dad_id,err_dad,'Father Name')"
+                         value="<?php echo $row['father_name'];?>">
                          <span class="help-block" id="err_dad" style="color: red;"></span>
                 </div>
             </div>
@@ -103,8 +116,9 @@
                 <label class="control-label col-sm-4" for="mom">Mother's Name :</label>
                 <div class="col-sm-5" id="mname">
                   <input type="mom" class="form-control" id="mom_id" name="mom" maxlength="20"
-                         placeholder="Enter mother's name" onkeypress="return onlyAlphabets(event);"
-                         onblur="isEmpty(mom_id,err_mom,'Mother Name')" required>
+                         onkeypress="return onlyAlphabets(event);"
+                         onblur="isEmpty(mom_id,err_mom,'Mother Name')"
+                         value="<?php echo $row['mother_name'];?>">
                         <span class="help-block" id="err_mom"  style="color: red;"></span>
 
                 </div>
@@ -115,7 +129,8 @@
                 <div class="col-xs-5 date" id="datep">
                   <div class="input-group input-append date" id="datePicker">
                     <input type="text" class="form-control" name="dob" id="date" 
-                           onblur="return validateDOB()" required />
+                           onblur="return validateDOB()" 
+                           value="<?php echo $row['dob'];?>" />
                     <span class="help-block" id="err_dob"  style="color: red;"></span>
                   </div>
                 </div>
@@ -123,7 +138,7 @@
 
             <div class="form-group">
               <label class="control-label col-sm-4" for="gender">Gender :</label>
-                <div class="col-sm-5 radio" id="sex">
+                <div class="col-sm-5 radio" id="sex" >
                     <label><input type="radio" id="male" name="gender" value="Male">Male</label>&nbsp;&nbsp;&nbsp;
                     <label><input type="radio" id="female" name="gender" value="Female" onblur="validateGender()">Female</label>
                     <span class="help-block" id="err_gender" style="color: red;"></span>
@@ -137,8 +152,8 @@
                       <option value="">Select Country</option>
                       <?php
                         if($rowCount > 0){
-                          while($row = mysql_fetch_assoc($query)){ 
-                              echo '<option value="'.$row['country_id'].'">'.$row['country_name'].'</option>';
+                          while($country = mysql_fetch_assoc($queryCountry)){ 
+                              echo '<option value="'.$country['country_id'].'">'.$country['country_name'].'</option>';
                             }
                         }
                         else{
@@ -171,7 +186,8 @@
                 <label class="control-label col-sm-4" for="district">District :</label>
                 <div class="col-sm-5" id="district">
                   <input type="pin" class="form-control" id="district_id" name="district" maxlength="20"
-                         placeholder="Enter District" onkeypress="return onlyAlphabets(event);">
+                         onkeypress="return onlyAlphabets(event);"
+                         value="<?php echo $row['district'];?>">
                 </div>
             </div>
 
@@ -179,8 +195,9 @@
                 <label class="control-label col-sm-4" for="pin">Pincode :</label>
                 <div class="col-sm-5" id="pincode">
                   <input type="pin" class="form-control" id="pin_id" name="pin" maxlength="6"
-                         placeholder="Enter Pincode" onkeypress="return onlyNumeric(event);"
-                         onblur="isEmpty(pin_id,err_pin,'Pincode')" required>
+                         onkeypress="return onlyNumeric(event);"
+                         onblur="isEmpty(pin_id,err_pin,'Pincode')"
+                         value="<?php echo $row['pincode'];?>">
                          <span class="help-block" id="err_pin" style="color: red;"></span>
                 </div>
             </div>
@@ -189,7 +206,8 @@
                 <label class="control-label col-sm-4" for="nationality">Nationality :</label>
                 <div class="col-sm-5" id="nation">
                   <input type="nationality" class="form-control" id="nationality_id" name="nationality"
-                         maxlength="20" placeholder="Enter nationality" onkeypress="return onlyAlphabets(event);" onblur="isEmpty(nationality_id,err_nationality,'Nationality')" required>
+                         maxlength="20" 
+                         onkeypress="return onlyAlphabets(event);" onblur="isEmpty(nationality_id,err_nationality,'Nationality')" value="<?php echo $row['nationality'];?>">
                          <span class="help-block" id="err_nationality" style="color: red;"></span>
                 </div>
             </div>
@@ -198,7 +216,8 @@
                 <label class="control-label col-sm-4" for="religion">Religion :</label>
                 <div class="col-sm-5" id="rel">
                   <input type="religion" class="form-control" id="religion_id" name="religion"
-                         maxlength="20" placeholder="Enter religion" onkeypress="return onlyAlphabets(event);" onblur="isEmpty(religion_id,err_religion,'Religion')" required>
+                         maxlength="20"
+                        onkeypress="return onlyAlphabets(event);" onblur="isEmpty(religion_id,err_religion,'Religion')" value="<?php echo $row['religion'];?>">
                          <span class="help-block" id="err_religion" style="color: red;"></span>
                 </div>
             </div>
@@ -207,7 +226,7 @@
                 <label class="control-label col-sm-4" for="phone">Phone No. :</label>
                 <div class="col-sm-1">
                   <input type="text" class="form-control" id="cc" maxlength="2" value="+91" 
-                         onkeypress="return onlyNumeric(event);" required>
+                         onkeypress="return onlyNumeric(event);">
                 </div>
                 <div class="col-sm-1" id="stdph">
                   <input type="text" class="form-control" id="std" placeholder="STD " maxlength="4" name="std"
@@ -216,8 +235,9 @@
                          <span class="help-block" id="err_std" style="color: red;"></span>
                 </div>
                 <div class="col-sm-3" id="ph">
-                  <input type="text" class="form-control" id="phone_id" name="phone" placeholder="Enter phone no."       maxlength="6" onkeypress="return onlyNumeric(event);"
-                         >
+                  <input type="text" class="form-control" id="phone_id" name="phone" maxlength="6" 
+                         onkeypress="return onlyNumeric(event);"
+                         value="<?php echo $row['phone_no'];?>">
                          <span class="help-block" id="err_phone" style="color: red;"></span>
                 </div>
             </div>
@@ -228,9 +248,10 @@
                   <input type="ccode" class="form-control" id="ccode" value="+91" maxlength="2">
                 </div>
                 <div class="col-sm-4" id="mobile">
-                  <input type="text" class="form-control" id="mob_id" name="mob" placeholder="Enter mobile"
+                  <input type="text" class="form-control" id="mob_id" name="mob"
                          maxlength="10" onkeypress="return onlyNumeric(event);"
-                         onblur="isEmpty(mob_id,err_mob,'Mobile')" required>
+                         onblur="isEmpty(mob_id,err_mob,'Mobile')" 
+                         value="<?php echo $row['mobile_no'];?>">
                          <span class="help-block" id="err_mob" style="color: red;"></span>
                 </div>
             </div>
@@ -240,7 +261,7 @@
                 <div class="col-sm-5" id="mail">
                   <input type="text" class="form-control" id="email_id" name="email" maxlength="20"
                          placeholder="Enter email" 
-                         onblur="return ValidateEmail(document.frmRegister.email),isEmpty(email_id,err_email,'Email')" required>
+                         onblur="return ValidateEmail(document.frmRegister.email),isEmpty(email_id,err_email,'Email')" value="<?php echo $row['email'];?>">
                          <span class="help-block" id="err_email" style="color: red;"></span>
 
                 </div>
@@ -249,7 +270,9 @@
             <div class="form-group">
                 <label class="control-label col-sm-4" for="education">Education :</label>
                 <div class="col-sm-5" id="edu">
-                  <input type="text" class="form-control" id="education_id" name="education" maxlength="20"       placeholder="Enter education" onblur="isEmpty(education_id,err_education,'Education')" required>
+                  <input type="text" class="form-control" id="education_id" name="education" maxlength="20"
+                         onblur="isEmpty(education_id,err_education,'Education')" 
+                         value="<?php echo $row['education'];?>">
                          <span class="help-block" id="err_education" style="color: red;"></span>
                 </div>
             </div>
@@ -258,14 +281,7 @@
                 <label class="control-label col-sm-4" for="yop">Year Of Passing :</label>
                 <div class="col-sm-5 dropdown" id="passyr">
                     <select id="yop_id">
-                      <option id ="" name="yop">Select</option>
-                      <option id ="2011" name="yop">2011</option>
-                      <option id ="2012" name="yop">2012</option>
-                      <option id ="2013" name="yop">2013</option>
-                      <option id ="2014" name="yop">2014</option>
-                      <option id ="2015" name="yop">2015</option>
-                      <option id ="2016" name="yop">2016</option>
-                      <option id ="2017" name="yop">2017</option>
+                      <option id ="" name="yop" value="<?php echo $row['year_of_passing'];?>"></option>
                     </select>
                     <span class="help-block" id="err_yop" style="color: red;"></span>
                 </div>
@@ -275,8 +291,9 @@
                 <label class="control-label col-sm-4" for="uni">Board / University :</label>
                 <div class="col-sm-5" id="boru">
                   <input type="text" class="form-control" id="uni_id" name="uni" maxlength="20"
-                         placeholder="Enter Baord / University" onkeypress="return onlyAlphabets(event);"
-                         onblur="isEmpty(uni_id,err_uni,'Board / University')" required>
+                         onkeypress="return onlyAlphabets(event);"
+                         onblur="isEmpty(uni_id,err_uni,'Board / University')"
+                         value="<?php echo $row['board_university'];?>">
                          <span class="help-block" id="err_uni" style="color: red;"></span>
                 </div>
             </div>
@@ -284,52 +301,18 @@
             <div class="form-group">
                 <label class="control-label col-sm-4" for="phy">Physical Attribute :</label>
                 <div class="col-sm-2 radio">
-                 <label><input type="radio" name="phy" id="phy_att_id" value="yes" 
+                 <label><input type="radio" name="phy" id="phy_att_id" value="<?php echo $row['phy_attr'];?>" 
                                onblur="validatePhysicalAttribute()">Yes</label>&nbsp;&nbsp;&nbsp;
                     <label><input type="radio" name="phy" value="ndo" id="phy_att_id" 
                                onblur="validatePhysicalAttribute()">No</label>
                 </div>
                 <div class="col-sm-3" id="phy_att">
                   <input type="text" class="form-control" id="phy_issue_id" maxlength="40"
-                         placeholder="" name="phy_issue">
+                         name="phy_issue" value="<?php echo $row['phy_issue'];?>">
                          <span class="help-block" id="err_phy" style="color: red;"></span>
                 </div>
             </div>
             
-            <div class="form-group">
-                <label class="control-label col-sm-4" for="password">Password :</label>
-                <div class="col-sm-5" id="pass">
-                  <input type="password" class="form-control" id="password_id" name="pwd"
-                         onblur="isEmpty(password_id,err_password,'Password')" required>
-                  <span class="help-block" id="err_password" style="color: red;"></span>
-
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label class="control-label col-sm-4" for="repassword">Re-enter Password :</label>
-                <div class="col-sm-5" id="repass">
-                  <input type="password" class="form-control" id="re-password_id" name="repassword" 
-                         placeholder="Re-enter Password" onblur="validateReEnterPassword()" required>
-                  <span class="help-block" id="err_repassword" style="color: red;"></span>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label class="control-label col-sm-4" for="captcha">Captcha :</label>
-                <div class="col-sm-5">
-                  <div class="g-recaptcha" data-sitekey="6LdESwoUAAAAAO39Pz9rpUb-gVDC6XwiwYhGaJ7X"></div>
-                </div>
-            </div>
-
-             <div class="form-group">
-              <div class="col-sm-12 checkbox" align="center" id="chk" >
-                  <input type="checkbox" name="terms" id="chkTerms_id" onblur="validateTerms()">
-                  I Accept all the terms and conditions
-                  <span class="help-block" id="err_terms" style="color: red;"></span>
-              </div>
-            </div>
-
             <div class="form-group">
                 <div class="col-sm-12" align="center">
                   <button type="submit" id="btnSubmit" class="btn btn-success btn-lg">Register</button>&nbsp; &nbsp;
